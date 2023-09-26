@@ -42,7 +42,7 @@ class AuthUserHandlerArgumentResolver : HandlerMethodArgumentResolver {
     }
 }
 
-data class AuthUser (
+data class AuthUser(
     val userId: Long,
     val username: String,
     val profileUrl: String? = null,
