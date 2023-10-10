@@ -3,6 +3,7 @@ package example.kopring.userservice.service
 import example.kopring.userservice.config.JWTProperties
 import example.kopring.userservice.domain.entity.User
 import example.kopring.userservice.domain.repository.UserRepository
+import example.kopring.userservice.exception.InvalidJwtTokenException
 import example.kopring.userservice.exception.PasswordNotMatchedException
 import example.kopring.userservice.exception.UserExistsException
 import example.kopring.userservice.exception.UserNotFoundException
@@ -69,5 +70,20 @@ class UserService(
 
     suspend fun logout(token: String) {
         cacheManager.awaitEvict(token)
+    }
+
+    suspend fun getByToken(token: String) : User {
+        val cachedUser = cacheManager.awaitGetOrPut(key = token, ttl = CACHE_TTL) {
+            // 캐시가 유효하지 않은 경우 동작
+            val decodedJWT = JWTUtils.decode(token, jwtProperties.secret, jwtProperties.issuer)
+
+            val userId: Long = decodedJWT.claims["userId"]?.asLong() ?: throw InvalidJwtTokenException()
+            get(userId)
+        }
+        return cachedUser
+    }
+
+    suspend fun get(userId:Long) : User {
+        return userRepository.findById(userId) ?: throw UserNotFoundException()
     }
 }
