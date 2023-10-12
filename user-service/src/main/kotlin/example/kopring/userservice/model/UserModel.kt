@@ -4,6 +4,10 @@ package example.kopring.userservice.model
 import example.kopring.userservice.domain.entity.User
 import java.time.LocalDateTime
 
+data class UserEditRequest(
+    val username: String,
+)
+
 data class MeResponse(
     val id: Long,
     val profileUrl: String?,
