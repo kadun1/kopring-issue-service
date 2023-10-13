@@ -17,6 +17,7 @@ class ImageController {
 
     @GetMapping("{filename}")
     fun image(@PathVariable filename: String): ResponseEntity<InputStreamResource> {
+
         val ext = filename.substring(filename.lastIndexOf(".") + 1)
         val file = File(ClassPathResource("/images/").file, filename)
 
