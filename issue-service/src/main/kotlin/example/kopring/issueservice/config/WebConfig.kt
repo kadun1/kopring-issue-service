@@ -29,7 +29,7 @@ class WebConfig(
 
 @Component
 class AuthUserHandlerArgumentResolver(
-    @Value("\${auth.url") val authUrl: String,
+    @Value("\${auth.url}") val authUrl: String,
 ) : HandlerMethodArgumentResolver {
 
     override fun supportsParameter(parameter: MethodParameter): Boolean =
